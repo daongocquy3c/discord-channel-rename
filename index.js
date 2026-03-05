@@ -30,12 +30,14 @@ client.on('messageCreate', async (message) => {
     const channel = message.channel;
     const currentName = channel.name;
 
-    // Phải có số ở cuối tên kênh (vd: legit-proof-97)
-    const match = currentName.match(/(.*-)(\d+)$/);
+    // Tìm số ở cuối tên kênh (không quan tâm phía trước là gì)
+    const match = currentName.match(/(\d+)$/);
     if (!match) return;
 
-    const baseName = match[1];
-    const number = parseInt(match[2]);
+    const number = parseInt(match[1]);
+
+    // Lấy toàn bộ phần trước số
+    const baseName = currentName.slice(0, -match[1].length);
 
     const newName = `${baseName}${number + 1}`;
 
