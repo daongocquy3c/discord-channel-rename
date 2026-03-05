@@ -10,23 +10,27 @@ const client = new Client({
 });
 
 const TOKEN = process.env.TOKEN;
-const YOUR_USER_ID = "932528153354698753";
-const TARGET_CHANNEL_ID = "1452220713636462734";
+const TARGET_CHANNEL_ID = "1452220713636462734"; // đổi nếu cần
 
 client.on('ready', () => {
-    console.log(`Logged in as ${client.user.tag}`);
+    console.log(`✅ Logged in as ${client.user.tag}`);
 });
 
 client.on('messageCreate', async (message) => {
 
+    // Bỏ qua bot
     if (message.author.bot) return;
-    if (message.author.id !== YOUR_USER_ID) return;
+
+    // Chỉ hoạt động trong channel chỉ định
     if (message.channel.id !== TARGET_CHANNEL_ID) return;
-    if (message.attachments.size === 0) return;
+
+    // Phải có nội dung hoặc có ảnh
+    if (message.content.length === 0 && message.attachments.size === 0) return;
 
     const channel = message.channel;
     const currentName = channel.name;
 
+    // Phải có số ở cuối tên kênh (vd: legit-proof-97)
     const match = currentName.match(/(.*-)(\d+)$/);
     if (!match) return;
 
@@ -37,10 +41,10 @@ client.on('messageCreate', async (message) => {
 
     try {
         await channel.setName(newName);
-        console.log(`Renamed to ${newName}`);
+        console.log(`✅ Renamed to ${newName}`);
     } catch (err) {
-        console.error(err);
+        console.error("❌ Rename failed:", err);
     }
 });
 
-client.login(process.env.TOKEN);
+client.login(TOKEN);
